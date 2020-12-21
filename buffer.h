@@ -33,4 +33,19 @@ void freeBuffer(Buffer *a) {
   a->used = a->size = 0;
 }
 
+Buffer read_file(Buffer a, char txt[]){
+    
+    char c;
+    initBuffer(&a, 150);
+    FILE * file = fopen(txt, "rb");
+    while(c != EOF){
+        c = fgetc(file);
+        insertBuffer(&a, c);
+        
+    }
+
+    printf("Size:%d usedSize:%d \n",a.size,a.used);
+return a;
+}
+
 #endif //buffer
