@@ -4,7 +4,7 @@ int printBuff(Buffer *a){
    
     int i = 0;
    char c;
-   while(a->array[i + 1] != '\0'){
+   while(a->array[i] != '\0'){
        c = a->array[i];
        printf("%c",c);
        i++;
@@ -25,6 +25,7 @@ int copyNelments(Buffer *a, Buffer *b, int N, int initial_pos){
         if(a -> array[i] == '@') cont1++;
         i++;
         printf("primeiro \n");
+        if(cont1 == initial_pos) i--;
     }
     
     while(cont2 < N && i < a->used){
@@ -38,9 +39,8 @@ int copyNelments(Buffer *a, Buffer *b, int N, int initial_pos){
                i++;
                printf("terceiro \n");
            }
-        }
-        i++;
-       
+        } 
+    
     } 
 
    }
@@ -51,7 +51,7 @@ int main(){
    Buffer initial_buffer = read_file_buffer(initial_buffer,"aaa.txt.rle.freq");
    Buffer final_buffer;
    initBuffer(&final_buffer,150);
-   copyNelments(&initial_buffer, &final_buffer,2,0);
+   copyNelments(&initial_buffer, &final_buffer,4,2);
    printBuff(&final_buffer);
 
    
