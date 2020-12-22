@@ -2,7 +2,6 @@
 #define buffer
 
 
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -33,7 +32,7 @@ void freeBuffer(Buffer *a) {
   a->used = a->size = 0;
 }
 
-Buffer read_file(Buffer a, char txt[]){
+Buffer read_file_buffer(Buffer a, char txt[]){
     
     char c;
     initBuffer(&a, 150);
