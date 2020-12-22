@@ -93,9 +93,15 @@ int copyNelments(Buffer *a, Buffer *b, int N, int initial_pos){
         } 
     
     } 
-
+    return 0;
    }
 
-
+// A Função swapBuffer recebe um buffer e duas posições do buffer e troca o que está nessas duas posições
+void swapBuffer (Buffer *a,int i,int y){ 
+   int temp;
+   temp=a->array[i];
+   a->array[i]=a->array[y];
+   a->array[y]=temp;
+}
 
 #endif //buffer
