@@ -11,7 +11,7 @@ typedef struct {
   int size;
 } Buffer ;
 
-// Funções de inicialização, gestão , cópia e libertação de memória em relação a buffersvv
+// Funções de inicialização, gestão , cópia e libertação de memória em relação a buffers
 
 void initBuffer(Buffer *a, int initialSize) {
   a->array = malloc(initialSize * sizeof(char));
@@ -34,19 +34,19 @@ void freeBuffer(Buffer *a) {
   a->used = a->size = 0;
 }
 
-Buffer read_file_buffer(Buffer * a, char txt[]){
+Buffer  read_file_buffer(Buffer * a, char txt[]){
     
     char c;
-    initBuffer(&a, 150);
+    initBuffer(a, 150);
     FILE * file = fopen(txt, "rb");
     while(c != EOF){
         c = fgetc(file);
-        insertBuffer(&a, c);
+        insertBuffer(a, c);
         
     }
 
-    printf("Size:%d usedSize:%d \n",a.size,a.used);
-return a;
+    printf("Size:%d usedSize:%d \n",a->size,a->used);
+return *a;
 }
 
 // Função que escreve que faz print no buffer
