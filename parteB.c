@@ -127,13 +127,26 @@ void calcular_codigos_SF(int freqs[],Buffer codes[],int start, int end){
     }
 }
 
-//Função que calcula o numero de frequencias diferentes de 0
-int calcula_n_freq (int freq[]){
+//Função que copia array
+
+int copy_array(int a[], int b[], int len){
+    int i = 0;
+    while ( i < len){
+        b[i] = a[i];
+        i++;
+    }
+    
+    return 0;
+}
+
+
+//Função que calcula o indice do ultimo elemento não nulo 
+int calcula_i_freq (int freq[]){
     int i=0;
     while (freq[i]!=0){
         i++;
     }
-    return i;
+    return i ;
 }
 
 //Função que dado um Buffer de frequencias produz um buffer codificado por SF
@@ -145,20 +158,20 @@ int codificaBuffer(Buffer * initial, Buffer * final){
     initBuffer (&aux, 150);
     copyNelments (initial, &aux, 1, 2+2*bloco);
     int tam_freq = aux.elem + 1;
-    int frequencia[tam_freq];
-    retiraFreq(&aux,frequencia);
-    BubbleSort(frequencia,tam_freq);
-    int n_freq_n0  = calcula_n_freq (frequencia); 
-    printf("%i\n",n_freq_n0);
-    Buffer codes[tam_freq];
-    initBufferArray(codes, tam_freq);
-    calcular_codigos_SF(frequencia,codes,0,15);
-    print_array(frequencia,tam_freq);
-    while(i < 10){
-        printBuff(&codes[i]);
-        printf("\n");
-        i++;
-    } 
+    int frequencias[tam_freq];
+    int frequenciaSorted[tam_freq];
+    retiraFreq(&aux,frequencias);
+    copy_array(frequencias,frequenciaSorted, tam_freq);
+    BubbleSort(frequenciaSorted,tam_freq);
+    int n_freq_n0  = calcula_i_freq (frequenciaSorted); 
+    Buffer codes[n_freq_n0];
+    initBufferArray(codes, n_freq_n0);
+    calcular_codigos_SF(frequenciaSorted,codes,0,n_freq_n0 - 1);
+    print_array(frequenciaSorted,tam_freq);
+    printf("\n \n");
+    print_array(frequencias, tam_freq);
+   
+   
     return 0;
 }
 
