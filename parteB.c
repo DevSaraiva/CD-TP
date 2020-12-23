@@ -5,6 +5,7 @@
 //Função que dado o indice da frequencia num Buffer de chars devolve essa mesma frequência em formato inteiro
  int calculaFrequencia (Buffer *a, int indice, int freq_anterior){
     int i=1, b=0, freq=0;
+    if (indice == (a->used-1)) return freq_anterior;
     while (a->array[indice + i]!=';' && indice + i < a->used){
         i++;
     }
@@ -25,13 +26,14 @@
     while (aux->array[i]!=';') {
             i++;
         }
-    while (i < aux -> used){
-        
+        printf ("%i\n",aux->used);
+    while (i < aux -> used  ){
         frequencia[j]=calculaFrequencia(aux,i, frequencia[j-1]);
-         i++;
-
-        while (aux->array[i]!=';') {
-            i++;
+        i++;
+        if (i<aux->used-1){
+            while (aux->array[i]!=';') {
+                i++;
+            }
         }
         j++;
     } 
@@ -68,19 +70,18 @@ int print_array(int *array, int length)
 
 int codificaBuffer(Buffer * initial, Buffer * final){
     
-    int bloco = 1;
+    int bloco = 2;
     Buffer aux;
     initBuffer (&aux, 150);
     copyNelments (initial, &aux, 1, 2+2*bloco);
     int tam_freq = aux.elem + 1;
     int frequencia[tam_freq];
+    
     printBuff(&aux);
     retiraFreq(&aux,frequencia);
     BubbleSort(frequencia,tam_freq);
     print_array(frequencia, tam_freq);
 
-    
-   
     
     return 0;
 }
