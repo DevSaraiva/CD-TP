@@ -26,20 +26,16 @@ char* encode(char* src)
 
         if(rLen == 3) { 
             /*for(int n = rLen; n >= 1;n--){
-                //sprintf(count,"%c",src[i]);
-        
-        }*/
+                //sprintf(count,"%c",src[i]); }*/
+         
         sprintf(count,"%c%c",src[i],src[i]);
         }
         
         else if(rLen == 2) {
             sprintf(count,"%c",src[i]);
-
-        } 
-        else if(rLen == 1){
+        } else if(rLen == 1){
             sprintf(count,"",src[i]);
-        }
-        else {
+        } else {
             sprintf(count, "{%d}₁", rLen);               
         }
         
