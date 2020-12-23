@@ -68,7 +68,7 @@ int print_array(int *array, int length)
 
 int codificaBuffer(Buffer * initial, Buffer * final){
     
-    int bloco = 2;
+    int bloco = 1;
     Buffer aux;
     initBuffer (&aux, 150);
     copyNelments (initial, &aux, 1, 2+2*bloco);
