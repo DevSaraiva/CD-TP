@@ -4,7 +4,7 @@
 #define MAX_RLEN 255
  
 
-char* encode(char* src)
+char* encode(char* src) //FIXME - adicionar funAux que conte o rLen e criar funAuxiliares que construam corretamente a identaçao pertendida.
 {
     int rLen;                // numero de repeticoes
     char count[MAX_RLEN];    // buffer que guarda nº repeticoes
