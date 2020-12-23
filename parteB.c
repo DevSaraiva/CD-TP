@@ -113,7 +113,7 @@ void add_bit_to_code(char c, Buffer codes[],int start,int end){
     
 }
 
-
+//
 void calcular_codigos_SF(int freqs[],Buffer codes[],int start, int end){
     
     int div;
@@ -124,11 +124,19 @@ void calcular_codigos_SF(int freqs[],Buffer codes[],int start, int end){
         add_bit_to_code('1',codes,div+1,end);
         calcular_codigos_SF(freqs,codes,start,div);
         calcular_codigos_SF(freqs,codes,div+1,end);
+    }
 }
+
+//Função que calcula o numero de frequencias diferentes de 0
+int calcula_n_freq (int freq[]){
+    int i=0;
+    while (freq[i]!=0){
+        i++;
+    }
+    return i;
 }
 
 //Função que dado um Buffer de frequencias produz um buffer codificado por SF
-
 int codificaBuffer(Buffer * initial, Buffer * final){
     
     int i = 0;
@@ -140,6 +148,8 @@ int codificaBuffer(Buffer * initial, Buffer * final){
     int frequencia[tam_freq];
     retiraFreq(&aux,frequencia);
     BubbleSort(frequencia,tam_freq);
+    int n_freq_n0  = calcula_n_freq (frequencia); 
+    printf("%i\n",n_freq_n0);
     Buffer codes[tam_freq];
     initBufferArray(codes, tam_freq);
     calcular_codigos_SF(frequencia,codes,0,15);
@@ -148,13 +158,10 @@ int codificaBuffer(Buffer * initial, Buffer * final){
         printBuff(&codes[i]);
         printf("\n");
         i++;
-    }
-    
-    
-    
-    
+    } 
     return 0;
 }
+
 
 int main(){
     
@@ -163,9 +170,4 @@ int main(){
     initBuffer(&aux, 150);
     codificaBuffer(&initial,&aux);
     
-    
-
-    
 }
-
-
