@@ -57,6 +57,7 @@ void BubbleSort(int a[], int N)
 }
 
 //Função usada para debugging do código
+
 int print_array(int *array, int length)
 {
     for (int i = 0; i < length; i++) { printf("%d ",array[i]);}
@@ -64,18 +65,20 @@ int print_array(int *array, int length)
 }
 
 //Função que dado um Buffer de frequencias produz um buffer codificado por SF
+
 int codificaBuffer(Buffer * initial, Buffer * final){
     
-    int bloco = 1;
+    int bloco = 2;
     Buffer aux;
     initBuffer (&aux, 150);
     copyNelments (initial, &aux, 1, 2+2*bloco);
-    int frequencia[aux.elem + 1];
+    int tam_freq = aux.elem + 1;
+    int frequencia[tam_freq];
     printBuff(&aux);
-    printf("\n");
     retiraFreq(&aux,frequencia);
-    print_array(frequencia,aux.elem + 1);
-    
+    BubbleSort(frequencia,tam_freq);
+    print_array(frequencia, tam_freq);
+
     
    
     
@@ -85,15 +88,13 @@ int codificaBuffer(Buffer * initial, Buffer * final){
 
 
 
-
-
 int main(){
     
     Buffer initial = read_file_buffer(&initial,"aaa.txt.rle.freq");
     Buffer aux;
     initBuffer(&aux, 150);
-    copyNelments (&initial, &aux, 1, 2+2*1);
     codificaBuffer(&initial,&aux);
+    
     
 
     
