@@ -65,40 +65,15 @@ int print_array(int *array, int length)
     return 0;
 }
 
-//Função que dado um Buffer de frequencias produz um buffer codificado por SF
-
-int codificaBuffer(Buffer * initial, Buffer * final){
+//Função que inicializa array de Buffers
+int initBufferArray(Buffer array [], int N){
     
-    int bloco = 1;
-    Buffer aux;
-    initBuffer (&aux, 150);
-    copyNelments (initial, &aux, 1, 2+2*bloco);
-    int tam_freq = aux.elem + 1;
-    int frequencia[tam_freq];
-    
-    printBuff(&aux);
-    retiraFreq(&aux,frequencia);
-    BubbleSort(frequencia,tam_freq);
-    printf ("\n");
-    print_array(frequencia, tam_freq);
-
-    
-    return 0;
-}
-
-
-
-
-int main(){
-    
-    Buffer initial = read_file_buffer(&initial,"aaa.txt.rle.freq");
-    Buffer aux;
-    initBuffer(&aux, 150);
-    codificaBuffer(&initial,&aux);
-    
-    
-
-    
+    int i = 0;
+    while(i <  N){
+        initBuffer(&array[i],10);
+        i++;
+    }
+return 0;
 }
 
 
@@ -112,20 +87,85 @@ int soma (int freq[],int i,int j){
     return resultado;
 }
 
-int calcula_melhor_divisão (int freq[],int i,int j){
+int calcula_melhor_divisao (int freq[],int i,int j){
     int div = i;
     int total , mindif , dif , g1, g2;
     total = mindif = dif = soma(freq,i,j);
     while (dif == mindif){
-     g1 = soma(freq,i,div);   
-     g2 = total - g1;
-     dif = abs(g1-g2);
-     if (dif < mindif){
-         div = div +1;
-         mindif = dif;
-     }
-     else dif = mindif + 1;
-    }
+        g1 = soma(freq,i,div);   
+        g2 = total - g1;
+        dif = abs(g1-g2);
+        if (dif < mindif){
+             div = div +1;
+            mindif = dif;
+        }
+        else dif = mindif + 1;
+        }
     return div-1;
 }
+
+void add_bit_to_code(char c, Buffer codes[],int start,int end){
+    int i = start;
+    while(i <= end){
+        insertBuffer(&codes[i], c);
+        i++;
+    }
+    
+}
+
+
+void calcular_codigos_SF(int freqs[],Buffer codes[],int start, int end){
+    
+    int div;
+
+    if (start!=end){
+        div = calcula_melhor_divisao(freqs,start,end);
+        add_bit_to_code('0',codes,start,div);
+        add_bit_to_code('1',codes,div+1,end);
+        calcular_codigos_SF(freqs,codes,start,div);
+        calcular_codigos_SF(freqs,codes,div+1,end);
+}
+}
+
+//Função que dado um Buffer de frequencias produz um buffer codificado por SF
+
+int codificaBuffer(Buffer * initial, Buffer * final){
+    
+    int i = 0;
+    int bloco = 1;
+    Buffer aux;
+    initBuffer (&aux, 150);
+    copyNelments (initial, &aux, 1, 2+2*bloco);
+    int tam_freq = aux.elem + 1;
+    int frequencia[tam_freq];
+    retiraFreq(&aux,frequencia);
+    BubbleSort(frequencia,tam_freq);
+    Buffer codes[tam_freq];
+    initBufferArray(codes, tam_freq);
+    calcular_codigos_SF(frequencia,codes,0,15);
+    print_array(frequencia,tam_freq);
+    while(i < 10){
+        printBuff(&codes[i]);
+        printf("\n");
+        i++;
+    }
+    
+    
+    
+    
+    return 0;
+}
+
+int main(){
+    
+    Buffer initial = read_file_buffer(&initial,"aaa.txt.rle.freq");
+    Buffer aux;
+    initBuffer(&aux, 150);
+    codificaBuffer(&initial,&aux);
+    
+    
+
+    
+}
+
 
