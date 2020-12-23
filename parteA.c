@@ -3,8 +3,7 @@
 #include <string.h>
 #define MAX_RLEN 255
  
-/* Returns the Run Length Encoded string for the 
-   source string src */
+
 char* encode(char* src)
 {
     int rLen;                // numero de repeticoes
