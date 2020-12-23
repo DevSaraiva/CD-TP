@@ -26,7 +26,6 @@
     while (aux->array[i]!=';') {
             i++;
         }
-        printf ("%i\n",aux->used);
     while (i < aux -> used  ){
         frequencia[j]=calculaFrequencia(aux,i, frequencia[j-1]);
         i++;
@@ -70,7 +69,7 @@ int print_array(int *array, int length)
 
 int codificaBuffer(Buffer * initial, Buffer * final){
     
-    int bloco = 2;
+    int bloco = 1;
     Buffer aux;
     initBuffer (&aux, 150);
     copyNelments (initial, &aux, 1, 2+2*bloco);
@@ -80,6 +79,7 @@ int codificaBuffer(Buffer * initial, Buffer * final){
     printBuff(&aux);
     retiraFreq(&aux,frequencia);
     BubbleSort(frequencia,tam_freq);
+    printf ("\n");
     print_array(frequencia, tam_freq);
 
     
@@ -100,3 +100,32 @@ int main(){
 
     
 }
+
+
+//Função que calcula a soma das frequências do grupo freq[i,j] (i.e., freq[i]+...+freq[j])
+int soma (int freq[],int i,int j){
+    int resultado=0;
+    while (i<=j){
+        resultado += freq[i];
+        i++;
+    }
+    return resultado;
+}
+
+int calcula_melhor_divisão (int freq[],int i,int j){
+    int div = i;
+    int total , mindif , dif , g1, g2;
+    total = mindif = dif = soma(freq,i,j);
+    while (dif == mindif){
+     g1 = soma(freq,i,div);   
+     g2 = total - g1;
+     dif = abs(g1-g2);
+     if (dif < mindif){
+         div = div +1;
+         mindif = dif;
+     }
+     else dif = mindif + 1;
+    }
+    return div-1;
+}
+
