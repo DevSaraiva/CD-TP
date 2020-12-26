@@ -238,11 +238,10 @@ void codeBlock(Buffer * aux, Buffer * final, int bloco){
         index = findIndex(freq, frequenciaSorted);
         copyCodetoBufer(&codes[index],final);}
        
-        insertBuffer(final,';');
+        if(i + 1 < tam_freq)insertBuffer(final,';');
 
         i++;
     }
- 
 }
 
 
@@ -276,8 +275,8 @@ void code(Buffer * initial, Buffer * final){
 
 int main(){
     
-    char name[] = "aaa.txt.rle.freq";
-    Buffer initial = read_file_buffer(&initial,"aaa.txt.rle.freq");
+    char name[] = "aaa.txt.freq";
+    Buffer initial = read_file_buffer(&initial,name);
     Buffer final;
     initBuffer(&final, 150);
     code(&initial,&final);
