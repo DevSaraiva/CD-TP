@@ -172,7 +172,7 @@ int copyCodetoBufer(Buffer * codes, Buffer * final){
         i++;
     }
 
-    
+    return 0;
 }
 
 //Função que calcula o número de blocos
@@ -275,7 +275,7 @@ void code(Buffer * initial, Buffer * final){
 
 int main(){
     
-    char name[] = "aaa.txt.freq";
+    char name[] = "aaa.txt.rle.freq";
     Buffer initial = read_file_buffer(&initial,name);
     Buffer final;
     initBuffer(&final, 150);
