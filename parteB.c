@@ -182,7 +182,7 @@ int blockNumber (Buffer * initial){
     int number;
     number = initial -> array[3];
 
-    return number;
+    return number - 48;
 
 }
 
@@ -194,7 +194,7 @@ int findIndex(int freq, int sorted[]){
         i++;
     }
 
-    //sorted[i] = -1;
+    sorted[i] = -1;
 return i;
 }
 
@@ -242,13 +242,7 @@ void codeBlock(Buffer * aux, Buffer * final, int bloco){
 
         i++;
     }
-    
-    printCodesArray(codes, n_freq_n0);
-    printf("\n");
-    print_array(frequenciaSorted, n_freq_n0);
-    printf("\n");
-    print_array(frequencias, tam_freq);
-    printf("\n");
+ 
 }
 
 
@@ -263,7 +257,7 @@ void code(Buffer * initial, Buffer * final){
     int blocks = blockNumber(initial);
     
     
-    while(bloco <= 1){
+    while(bloco <= blocks){
         Buffer aux;
         initBuffer (&aux, 150);
         copyNelments (initial, &aux, 1, 2+2*bloco);
@@ -273,9 +267,8 @@ void code(Buffer * initial, Buffer * final){
         bloco++;}
     
     
-    
-    printBuff(final);
-   
+    insertBuffer(final,'@');
+    insertBuffer(final,'0');
    
     
 }
@@ -283,9 +276,11 @@ void code(Buffer * initial, Buffer * final){
 
 int main(){
     
+    char name[] = "aaa.txt.rle.freq";
     Buffer initial = read_file_buffer(&initial,"aaa.txt.rle.freq");
-    Buffer aux;
-    initBuffer(&aux, 150);
-    code(&initial,&aux);
+    Buffer final;
+    initBuffer(&final, 150);
+    code(&initial,&final);
+    write_file_buffer(&final,name);
     
 }

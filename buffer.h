@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct {
   char *array;
@@ -47,11 +48,57 @@ Buffer  read_file_buffer(Buffer * a, char txt[]){
         insertBuffer(a, c);
         
     }
+fclose(file);
 
 return *a;
 }
 
-// Função que escreve que faz print no buffer
+// Função que escreve o buffer no ficheiro
+
+int fprintBuff(Buffer *a, FILE * file){
+   
+   int i = 0;
+   char c;
+   while(a->array[i] != '\0'){
+       c = a->array[i];
+       fputc(c,file);
+       i++;
+   }
+    
+    
+    
+    return 0;
+}
+
+
+// Função que escreve a codificação no ficheiro
+
+void write_file_buffer(Buffer * final, char fileName[]){
+  
+  int i = 0;
+  while(fileName[i] != '\0'){
+    i++;
+  }
+  int last = i - 5;
+  i = 0;
+  char name[25];
+
+  while(i < last){
+    name[i] = fileName[i];
+    i++;
+  }
+  
+
+  char termination[] = ".cod";
+  strcat(name,termination);
+  FILE * file = fopen(name,"w");
+  fprintBuff(final,file);
+  
+
+}
+
+
+// Função que faz print no buffer
 
 int printBuff(Buffer *a){
    
@@ -102,5 +149,11 @@ void swapBuffer (Buffer *a,int i,int y){
    a->array[i]=a->array[y];
    a->array[y]=temp;
 }
+
+
+
+
+
+
 
 #endif //buffer
