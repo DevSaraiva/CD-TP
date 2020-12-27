@@ -60,7 +60,7 @@ int conta_simbolos(char* arr){
 }
 
 
-int compressao(Buffer origem, Buffer comprimido){   //, char* original)
+int compressao(Buffer origem, Buffer comprimido){  
     int simb_original = conta_simbolos(origem.array); 
     int simb_comprimido = conta_simbolos(comprimido.array);
     printf("Simbolos original: %d\n",simb_original);
@@ -69,6 +69,7 @@ int compressao(Buffer origem, Buffer comprimido){   //, char* original)
 
     int res = (100*(simb_original - simb_comprimido)) / simb_original;
     printf("Compressao de %d%%\n",res);
+    return res;
 }
 
 void main(FILE* source, FILE* destino) { 
@@ -133,16 +134,14 @@ while(origem.array[i+1] != '\0') {
     fclose(destino);
     Buffer comprimido;
     initBuffer(&comprimido,256);
-    while(c != EOF){
-        if(c != ' '){
-        c = fgetc(destino);
-        insertBuffer(&comprimido,c);
+    char ch;
+    while(ch != EOF){
+        if(ch != ' '){
+        ch = fgetc(destino);
+        insertBuffer(&comprimido,ch);
         }
     }
-    //printBuff(&comprimido);
-    
     compressao(origem,comprimido);
-    
 }
 
 
