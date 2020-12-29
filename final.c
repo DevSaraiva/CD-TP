@@ -75,40 +75,56 @@ int compressao(Buffer origem, int simb_comprimido){   //, char* original)
 }
 
 
+int freq(char* filename) {
+    FILE* source = fopen(filename, "rb");
 
-
-
-
-
-
-int rle(Buffer origem,char nome[],unsigned long tamanho_bloco, int index) { 
-    nome = "Test.txt";
-    FILE* source;
-    FILE* destino;
-    source = fopen(nome, "rb");
-    destino = fopen("Dest.txt", "wb");
-    char atualChar; 
-    char proxChar;
-    int i = 0;     
-    int count = 1;
-    int n_simbolos = 0;
-    int ind = 0;
-    Buffer bloco_temp;
-
-    while(ind != index * FSIZE_DEFAULT_BLOCK_SIZE){
     
-    initBuffer(&bloco_temp,256);
-    insertBuffer(&bloco_temp,origem.array[ind]);
-    
-    ind++;
+    Buffer bloco;
+    initBuffer(&bloco,256); //FIXME tamanho do bloco
+    char c;
+    while(c != EOF){             // while até ao fim do bloco
+        c = fgetc(source);
+        insertBuffer(&bloco,c);
     }
 
-while(bloco_temp.array[i+1] != '\0') {
+    int fr[bloco.used];
+    int visited = -1;
 
+    for(int i = 0; i < bloco.used; i++){
+        int count = 1;
+        for(int j = i + 1; j < bloco.used; j++){
+            if(bloco.array[i] == bloco.array[j]){
+                count++;
+                fr[j] = visited;
+            }
+        }
+        if(fr[i]!=visited)
+            fr[i] = count;
+    }
+     printf("---------------------\n");    
+    printf(" Element | Frequency\n");    
+    printf("---------------------\n");    
+    for(int i = 0; i < bloco.used; i++){    
+        if(fr[i] != visited){    
+            printf("    %d", bloco.array[i]);    
+            printf("    |  ");    
+            printf("  %d\n", fr[i]);    
+        }    
+    }    
+    printf("---------------------\n");    
+    return 0;    
+}
+int rle_aux(Buffer bloco_temp,FILE* destino) { //FIXME - FAZER A EXCEÇAO dos 5% na main, tendo em conta que e´ so´ pro primeiro BLOCO, temos q fazer um IF 1º bloco e compressao < 5% then APAGAR O FICHEIRO.Rle
+    destino = fopen("Dest.txt", "wb");         // FIXME - Temos tambem que implentar depois uma maneira de forçar a compressao mesmo que ela sejam menor q 5% conforme o enunciado atraves do interpretador
+    int i = 0; 
+    char atualChar; 
+    char proxChar;  
+    int n_simbolos = 0;
+    int count = 1;
+while(bloco_temp.array[i] != '\0') { // aqui antes era i + 1 
      atualChar = bloco_temp.array[i];
      proxChar = bloco_temp.array[i+1];
 
-         
         if(excecao(bloco_temp.array,i) == 1) {
             int count_exc = 1;
             
@@ -151,6 +167,24 @@ while(bloco_temp.array[i+1] != '\0') {
     return 0;
 }
 
+int rle(Buffer origem,char nome[],unsigned long block_size, int n_bloco) { 
+    FILE* source;
+    FILE* destino;
+    source = fopen(nome, "rb");  
+    Buffer bloco_temp;
+    initBuffer(&bloco_temp,256);
+    char n;
+    int ind = (n_bloco-1) * block_size;
+    while(ind < n_bloco * block_size){//index * FSIZE_DEFAULT_BLOCK_SIZE)
+    n = origem.array[ind];
+    insertBuffer(&bloco_temp,n);
+    
+    ind++;
+    }
+    printBuff(&bloco_temp);
+    rle_aux(bloco_temp, destino);
+    return 0;
+}
 
 int main(){
 
@@ -161,13 +195,13 @@ int main(){
     Buffer origem;
     initBuffer(&origem,256);
     char c;
-    char filename[] = "Test.txt";
+    char filename[] = "aaa.txt";
     fp = fopen(filename, "rb");
     while(c != EOF){
         c = fgetc(fp);
         insertBuffer(&origem,c);
     }
-
+    //printBuff(&origem);
     // Using function fsize() when file is already opened
     block_size = 65536;
     n_blocks = fsize(fp, NULL, &block_size, &size_of_last_block);   // numero blocos
