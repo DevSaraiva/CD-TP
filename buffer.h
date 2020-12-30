@@ -73,7 +73,7 @@ int fprintBuff(Buffer *a, FILE * file){
 
 // Função que escreve a codificação no ficheiro
 
-void write_file_buffer(Buffer * final, char fileName[]){
+void write_file_buffer(Buffer * final, char fileName[],char name[]){
   
   int i = 0;
   while(fileName[i] != '\0'){
@@ -81,7 +81,7 @@ void write_file_buffer(Buffer * final, char fileName[]){
   }
   int last = i - 5;
   i = 0;
-  char name[25];
+  //char name[25];
 
   while(i < last){
     name[i] = fileName[i];
@@ -152,7 +152,22 @@ void swapBuffer (Buffer *a,int i,int y){
 
 
 
-
+int calculaTamanhoBloco (Buffer *a,int i_bloco){
+    int i=0, b=0, tam=0, n_a =0;
+    while (n_a < (i_bloco+1)*2){
+        if (a->array[i]=='@') { 
+            //printf(" %c \n",a->array[i]);
+              n_a++;
+        }
+        i++;
+    }
+    i--;i--;
+    while (a->array[i]!='@') {
+        tam += (a->array[i]-48) * pow (10,b);
+        b++; i--;
+    }
+    return tam;
+}
 
 
 

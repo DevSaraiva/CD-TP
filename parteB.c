@@ -1,6 +1,6 @@
 #include <math.h>
 #include "buffer.h"
-
+#include <time.h>
 
 //Função que dado o indice da frequencia num Buffer de chars devolve essa mesma frequência em formato inteiro
  
@@ -62,9 +62,10 @@ void BubbleSort(int a[], int N)
 
 //Função usada para debugging do código
 
-int print_array(int *array, int length)
+int print_array(char *array)
 {
-    for (int i = 0; i < length; i++) { printf("%d ",array[i]);}
+    for (int i = 0; array[i] != '\0' ; i++) { printf("%c",array[i]);}
+    printf("\n");
     return 0;
 }
 
@@ -248,7 +249,7 @@ void codeBlock(Buffer * aux, Buffer * final, int bloco){
 
 //Função que dado um Buffer de frequencias produz um buffer codificado por SF
 
-void code(Buffer * initial, Buffer * final){
+int code(Buffer * initial, Buffer * final){
     
     copyNelments(initial,final,2,0);
     
@@ -269,17 +270,41 @@ void code(Buffer * initial, Buffer * final){
     insertBuffer(final,'@');
     insertBuffer(final,'0');
    
-    
+    return blocks;
 }
 
 
+
+
 int main(){
-    
+    clock_t start = clock();
     char name[] = "aaa.txt.rle.freq";
     Buffer initial = read_file_buffer(&initial,name);
     Buffer final;
     initBuffer(&final, 150);
-    code(&initial,&final);
-    write_file_buffer(&final,name);
+    int n_blocos = code(&initial,&final);
+    char name_return[25];
+    write_file_buffer(&final,name,name_return);
     
+    clock_t end = clock();
+    double total_time_s = (double)(end - start)/CLOCKS_PER_SEC; // in miliseconds 
+    double total_time_ms = total_time_s*1000;
+    printf ("Bernado & Rui, MIEI/CD, 3-jan-2021\n");
+    printf ("Módulo: t (cálculo dos códigos dos símbolos)\n");
+    printf ("Número de blocos: %d\n",n_blocos);
+    printf ("Tamanho dos blocos analisados no ficheiro de símbolos: ");
+    int i_bloco = 1;
+    int tam_bloco = 0;
+    while (i_bloco <= n_blocos){
+        tam_bloco = calculaTamanhoBloco(&final,i_bloco);
+        printf("%d",tam_bloco);
+        if (i_bloco < n_blocos) printf("/");
+        if (i_bloco == n_blocos) printf (" bytes \n");
+        i_bloco++;
+    }
+    printf ("Tempo de execução do módulo (milissegundos): %f\n",total_time_ms);
+    printf ("Ficheiro gerado: ");
+    print_array (name_return);
+    
+    //printBuff(&final);
 }
