@@ -4,11 +4,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct {
   char *array;
   int used;
   int size;
+  int elem;
 } Buffer ;
 
 // Funções de inicialização, gestão , cópia e libertação de memória em relação a buffers
@@ -16,6 +18,7 @@ typedef struct {
 void initBuffer(Buffer *a, int initialSize) {
   a->array = malloc(initialSize * sizeof(char));
   a->used = 0;
+  a -> elem = 0;
   a->size = initialSize;
 }
 
@@ -26,6 +29,7 @@ void insertBuffer(Buffer *a, char element) {
     a->array = realloc(a->array, a->size * sizeof(char));
   }
   a->array[a->used++] = element;
+  if(element == ';') a -> elem++;
 }
 
 void freeBuffer(Buffer *a) {
@@ -44,12 +48,34 @@ Buffer  read_file_buffer(Buffer * a, char txt[]){
         insertBuffer(a, c);
         
     }
+fclose(file);
 
-    printf("Size:%d usedSize:%d \n",a->size,a->used);
 return *a;
 }
 
-// Função que escreve que faz print no buffer
+// Função que escreve o buffer no ficheiro
+
+int fprintBuff(Buffer *a, FILE * file){
+   
+   int i = 0;
+   char c;
+   while(a->array[i] != '\0'){
+       c = a->array[i];
+       fputc(c,file);
+       i++;
+   }
+    
+    
+    
+    return 0;
+}
+
+
+
+
+
+
+// Função que faz print no buffer
 
 int printBuff(Buffer *a){
    
@@ -75,7 +101,6 @@ int copyNelments(Buffer *a, Buffer *b, int N, int initial_pos){
     while(cont1 < initial_pos){
         if(a -> array[i] == '@') cont1++;
         i++;
-        printf("primeiro \n");
         if(cont1 == initial_pos) i--;
     }
     
@@ -84,11 +109,9 @@ int copyNelments(Buffer *a, Buffer *b, int N, int initial_pos){
             cont2++;
             insertBuffer(b,a->array[i]);
             i++;
-            printf("segundo \n");
            while(a -> array[i] != '@'){
                insertBuffer(b,a->array[i]);
                i++;
-               printf("terceiro \n");
            }
         } 
     
@@ -103,5 +126,7 @@ void swapBuffer (Buffer *a,int i,int y){
    a->array[i]=a->array[y];
    a->array[y]=temp;
 }
+
+
 
 #endif //buffer
