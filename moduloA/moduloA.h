@@ -379,7 +379,7 @@ int exec_moduloA(char* filename, unsigned long block_size){
     ficheiro_rle = fopen(filename_freq, "rb");
     int n_blocks_rle = fsize(ficheiro_rle, NULL, &block_size, &size_of_last_block);
     if(n_blocks_rle == 1) {
-        printf("Tamanho dos blocos analisados no ficheiro RLE:_%lu bytes\n", size_of_last_block);
+        printf("Tamanho dos blocos analisados no ficheiro RLE:%lu bytes\n", size_of_last_block);
     } else {
     printf("Tamanho dos blocos analisados no ficheiro RLE: %lu bytes /%lu bytes\n",block_size,size_of_last_block);
     }
