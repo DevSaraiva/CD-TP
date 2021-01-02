@@ -165,7 +165,7 @@ int calcula_i_freq (int freq[]){
     return i ;
 }
 
-// Função que copia a codes para o final buffer
+// Função que copia os códigos para o final buffer
 
 int copyCodetoBufer(Buffer * codes, Buffer * final){
     
@@ -296,7 +296,7 @@ void exec_moduloB(char name[]){
     clock_t end = clock();
     double total_time_s = (double)(end - start)/CLOCKS_PER_SEC; // in miliseconds 
     double total_time_ms = total_time_s*1000;
-    printf ("Bernado & Rui, MIEI/CD, 3-jan-2021\n");
+    printf ("Bernado,a93189 & Rui,a93232, MIEI/CD, 3-jan-2021\n");
     printf ("Módulo: t (cálculo dos códigos dos símbolos)\n");
     printf ("Número de blocos: %d\n",n_blocos);
     printf ("Tamanho dos blocos analisados no ficheiro de símbolos: ");
