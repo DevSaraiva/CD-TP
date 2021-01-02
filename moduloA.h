@@ -9,6 +9,13 @@
 #include <math.h>
 #include "fsize.h"
 #include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stddef.h>
+#include "buffer.h"
+#include <math.h>
+#include <time.h>
 
 //Função para averiguar um caso de exceção ({0}₁) para a compressão RLE.
 int excecao(char* arr, int i){
@@ -315,17 +322,18 @@ int rle(Buffer origem,char filename[],unsigned long block_size,int total, int n_
 }
 
 //Função principal do módulo A.
-int exec_moduloA(char* filename,unsigned long block_size){ 
+int exec_moduloA(char* filename, unsigned long block_size){ 
     clock_t begin = clock();
     unsigned long long total;
     long long n_blocks;
-    unsigned long size_of_last_block, block_size;
+    unsigned long size_of_last_block;
     int block_compression[n_blocks];
     FILE *fp;
     Buffer origem;
     initBuffer(&origem,256);
     char c;
-    char filename_txt[40] = filename;
+    char filename_txt[40];
+    strcpy(filename_txt,filename);
 
     fp = fopen(filename_txt, "rb");
     while(c != EOF){
@@ -343,8 +351,9 @@ int exec_moduloA(char* filename,unsigned long block_size){
 
     //char filename_freq[] = "aaa.txt.rle";
     //rle_to_freq(filename);
-    char filename_freq[40] = filename;
-    char terminacao_rle[40] = ".rle";
+    char filename_freq[40];
+    strcpy(filename_freq, filename);
+    char terminacao_rle[] = ".rle";
     strcat(filename_freq,terminacao_rle); // tenho que adicionar .rle ao filename original qnd tiver o interpretador 
     rle_to_freq(filename_freq,block_size);
 

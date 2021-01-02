@@ -16,9 +16,16 @@ int main(){
     tam_name = strlen(filename);
     tam_comand = strlen(comand);
     if(tam_comand == 12 + tam_name){
-    if ( a == 'f') printf("A");
-    if (a == 't') exec_moduloB(filename);}
+    if ( a == 'f') exec_moduloA(filename, 65536);
+    if (a == 't') exec_moduloB(filename);
+    } else {
+        sscanf(comand,"shafa %s -m %c -%c %c",filename,&a,&b,&c);
+        if(a == 'f' && b == 'b' && c == 'K') exec_moduloA(filename, 655360);
+        if(a == 'f' && b == 'b' && c == 'm') exec_moduloA(filename, 8388608);
+        if(a == 'f' && b == 'b' && c == 'M') exec_moduloA(filename, 67108864);
 
+
+    }
 
     return 0;
 }
