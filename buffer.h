@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 typedef struct {
   char *array;
@@ -79,15 +80,14 @@ void write_file_buffer(Buffer * final, char fileName[],char name[]){
   while(fileName[i] != '\0'){
     i++;
   }
-  int last = i - 5;
+  int last = i-5;
   i = 0;
-  //char name[25];
 
   while(i < last){
     name[i] = fileName[i];
     i++;
   }
-  
+  name[i] = '\0';
 
   char termination[] = ".cod";
   strcat(name,termination);
