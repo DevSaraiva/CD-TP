@@ -364,7 +364,7 @@ int exec_moduloA(char* filename, unsigned long block_size){
     printf("Módulo: f (cálculo das frequências dos símbolos)\n");
     printf("Número de blocos: %lld\n",n_blocks);
     if(n_blocks == 1) {
-        printf("Tamanho dos blocos analisados no ficheiro original:_%lu\n", size_of_last_block);
+        printf("Tamanho dos blocos analisados no ficheiro original: %lu\n", size_of_last_block);
     } else {
     printf("Tamanho dos blocos analisados no ficheiro original: %lu/%lu\n",block_size,size_of_last_block);
     }
