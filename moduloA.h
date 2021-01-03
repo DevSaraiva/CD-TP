@@ -345,7 +345,7 @@ int exec_moduloA(char* filename, unsigned long block_size){
 
     char filename_freq[40];
     strcpy(filename_freq, filename);
-    char terminacao_rle[] = ".rle";
+    char terminacao_rle[40] = ".rle";
     strcat(filename_freq,terminacao_rle); 
     rle_to_freq(filename_freq,block_size);
 
@@ -363,17 +363,14 @@ int exec_moduloA(char* filename, unsigned long block_size){
 
     int compressao_media = soma / n_blocks;
     printf("Compressão RLE: %d\n", compressao_media);
-    /*
     FILE* ficheiro_rle;
     ficheiro_rle = fopen(filename_freq, "rb");
-    int n_blocks_rle = fsize(ficheiro_rle, NULL, &block_size, &size_of_last_block);
+    long long n_blocks_rle = fsize(ficheiro_rle, NULL, &block_size, &size_of_last_block);
     if(n_blocks_rle == 1) {
-        printf("Tamanho dos blocos analisados no ficheiro RLE:_%lu bytes\n", size_of_last_block);
+        printf("Tamanho dos blocos analisados no ficheiro RLE: %lu bytes\n", size_of_last_block);
     } else {
     printf("Tamanho dos blocos analisados no ficheiro RLE: %lu bytes /%lu bytes\n",block_size,size_of_last_block);
     }
-    */
-    printf("Tamanho dos blocos analisados no ficheiro RLE: \n");
     printf("Tempo de execução do módulo (milissegundos): %f\n",time_spent_ms);
     char terminacao_freq_print[40] = ".freq";
     strcat(filename_freq,terminacao_freq_print);
