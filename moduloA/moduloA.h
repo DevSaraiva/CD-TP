@@ -303,7 +303,7 @@ while(i < fim) {
     return compressao_bloco;
 }
 //Função que itera a função rle_aux para obter a compressão RLE bloco a bloco.
-int rle(Buffer origem,char filename[],unsigned long block_size,int total, int n_blocks, int* block_compression) { //
+int rle(Buffer origem,char filename[],unsigned long block_size,int total, int n_blocks) { //
        int i = 0, fim, soma = 0;
        char terminacao_rle[40] = ".rle";
        strcat(filename,terminacao_rle);
@@ -323,7 +323,6 @@ int exec_moduloA(char* filename, unsigned long block_size){
     unsigned long long total;
     long long n_blocks;
     unsigned long size_of_last_block;
-    int block_compression[n_blocks];
     FILE *fp;
     Buffer origem;
     initBuffer(&origem,256);
@@ -340,7 +339,7 @@ int exec_moduloA(char* filename, unsigned long block_size){
     int soma = 0;
     n_blocks = fsize(fp, NULL, &block_size, &size_of_last_block);   
     total = (n_blocks-1) * block_size + size_of_last_block;         
-    soma = rle(origem,filename_txt,block_size,total,n_blocks,block_compression);
+    soma = rle(origem,filename_txt,block_size,total,n_blocks);
     fclose(fp);
 
     char filename_freq[40];
