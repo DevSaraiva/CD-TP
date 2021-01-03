@@ -268,7 +268,7 @@ int code(Buffer * initial, Buffer * final){
         Buffer aux;
         initBuffer (&aux, 150);
         copyNelments (initial, &aux, 1, 2+2*bloco);
-        copyNelments(initial,final,1,2*bloco + 1); // copia tamanaho do  bloco 
+        copyNelments(initial,final,1,2*bloco + 1); // copia tamanho do  bloco 
         codeBlock(&aux, final, bloco);
         freeBuffer(&aux);
         bloco++;}
@@ -294,7 +294,7 @@ void exec_moduloB(char name[]){
     write_file_buffer(&final,name,name_return);
     
     clock_t end = clock();
-    double total_time_s = (double)(end - start)/CLOCKS_PER_SEC; // in miliseconds 
+    double total_time_s = (double)(end - start)/CLOCKS_PER_SEC; // em milissegundos
     double total_time_ms = total_time_s*1000;
     
     
