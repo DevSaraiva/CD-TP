@@ -375,10 +375,8 @@ int exec_moduloA(char* filename, unsigned long block_size){
     */
     printf("Tamanho dos blocos analisados no ficheiro RLE: \n");
     printf("Tempo de execução do módulo (milissegundos): %f\n",time_spent_ms);
-
     char terminacao_freq_print[40] = ".freq";
     strcat(filename_freq,terminacao_freq_print);
-
     printf("Ficheiros gerados: %s,%s",filename_txt,filename_freq);
 }
 
