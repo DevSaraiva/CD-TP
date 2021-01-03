@@ -71,10 +71,6 @@ int compressao(Buffer origem, int simb_comprimido){
     int simb_original = conta_simbolos(origem.array) - 1; 
     int res = (100*(simb_original - simb_comprimido)) / simb_original;
     if(((100*(simb_original - simb_comprimido)) % simb_original) >= 0.5){
-
-1
-
-#ifndef moduloA
         res++;
     }
     return res;
@@ -250,7 +246,6 @@ void rle_to_freq(char filename[], unsigned long block_size){
     }
     insertBuffer(&buffer_final,'@');
     insertBuffer(&buffer_final,'0');
-    printBuff(&buffer_final);
     write_file_buffer_ParteA(&buffer_final,filename);
 }
 
@@ -308,16 +303,29 @@ while(i < fim) {
 }
 //Função que itera a função rle_aux para obter a compressão RLE bloco a bloco.
 int rle(Buffer origem,char filename[],unsigned long block_size,int total, int n_blocks) { //
-       int i = 0, fim, soma = 0;
+       int i = 0, compressao = 0, soma = 0, i_block = 1, fim;
+       int ret = -1;
        char terminacao_rle[40] = ".rle";
        strcat(filename,terminacao_rle);
-
- for(int i_block = 1; i_block <= n_blocks; i_block++){
+       char auxiliar[40] = "compressao.txt.rle";
+ for(i_block = 1; i_block <= n_blocks; i_block++){
      i = (i_block-1)*block_size;
      if (i_block<n_blocks) fim = i_block*block_size;
     else fim = total;
-       soma += rle_aux(origem,filename,i,fim);
- }
+    if(i_block == 1) {
+       compressao = rle_aux(origem,auxiliar,i,fim);
+       printf("%d", compressao);
+        if(compressao < 5) {
+            remove("compressao.txt.rle");
+            return 0;
+        } else {
+            soma += rle_aux(origem,filename,i,fim);
+            remove("compressao.txt.rle");
+        } 
+    } else { 
+        soma += rle_aux(origem,filename,i,fim);
+    }
+ }  
     return soma;
 }
 
@@ -333,7 +341,6 @@ int exec_moduloA(char* filename, unsigned long block_size){
     char c;
     char filename_txt[40];
     strcpy(filename_txt,filename);
-
     fp = fopen(filename_txt, "rb");
     while(c != EOF){
         c = fgetc(fp);
@@ -345,12 +352,13 @@ int exec_moduloA(char* filename, unsigned long block_size){
     total = (n_blocks-1) * block_size + size_of_last_block;         
     soma = rle(origem,filename_txt,block_size,total,n_blocks);
     fclose(fp);
-
+        
     char filename_freq[40];
     strcpy(filename_freq, filename);
     char terminacao_rle[40] = ".rle";
-    strcat(filename_freq,terminacao_rle); 
-    rle_to_freq(filename_freq,block_size);
+    strcat(filename_freq,terminacao_rle);
+
+    if(soma != 0) rle_to_freq(filename_freq,block_size);   
 
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
@@ -363,9 +371,9 @@ int exec_moduloA(char* filename, unsigned long block_size){
     } else {
     printf("Tamanho dos blocos analisados no ficheiro original: %lu/%lu\n",block_size,size_of_last_block);
     }
-
     int compressao_media = soma / n_blocks;
     printf("Compressão RLE: %d\n", compressao_media);
+    if(soma != 0) {
     FILE* ficheiro_rle;
     ficheiro_rle = fopen(filename_freq, "rb");
     long long n_blocks_rle = fsize(ficheiro_rle, NULL, &block_size, &size_of_last_block);
@@ -373,11 +381,13 @@ int exec_moduloA(char* filename, unsigned long block_size){
         printf("Tamanho dos blocos analisados no ficheiro RLE: %lu bytes\n", size_of_last_block);
     } else {
     printf("Tamanho dos blocos analisados no ficheiro RLE: %lu bytes /%lu bytes\n",block_size,size_of_last_block);
+        }
     }
     printf("Tempo de execução do módulo (milissegundos): %f\n",time_spent_ms);
     char terminacao_freq_print[40] = ".freq";
     strcat(filename_freq,terminacao_freq_print);
-    printf("Ficheiros gerados: %s,%s",filename_txt,filename_freq);
+    if(soma < 5) printf("Ficheiros gerados: Não gera ficheiros (compressão menor que 5%%)");
+    else  printf("Ficheiros gerados: %s,%s",filename_txt,filename_freq);
 }
 
 #endif //moduloA
