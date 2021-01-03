@@ -9,6 +9,13 @@
 #include <math.h>
 #include "fsize.h"
 #include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stddef.h>
+#include "buffer.h"
+#include <math.h>
+#include <time.h>
 
 //Função para averiguar um caso de exceção ({0}₁) para a compressão RLE.
 int excecao(char* arr, int i){
@@ -303,8 +310,8 @@ int rle(Buffer origem,char filename[],unsigned long block_size,int total, int n_
        char auxiliar[40] = "compressao.txt.rle";
  for(i_block = 1; i_block <= n_blocks; i_block++){
      i = (i_block-1)*block_size;
-     if (i_block<n_blocks) fim = (i_block*block_size) - 1;
-    else fim = total - 1;
+     if (i_block<n_blocks) fim = i_block*block_size;
+    else fim = total;
     if(i_block == 1) {
        compressao = rle_aux(origem,auxiliar,i,fim);
         if(compressao < 5) {
@@ -379,7 +386,7 @@ int exec_moduloA(char* filename, unsigned long block_size){
     char terminacao_freq_print[40] = ".freq";
     strcat(filename_freq,terminacao_freq_print);
     if(soma < 5) printf("Ficheiros gerados: Não gera ficheiros (compressão menor que 5%%)");
-    else  printf("Ficheiros gerados: %s,%s",filename_txt,filename_freq);
+    else  printf("Ficheiros gerados: %s,%s\n",filename_txt,filename_freq);
 }
 
 #endif //moduloA
