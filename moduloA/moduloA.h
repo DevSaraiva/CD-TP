@@ -9,6 +9,13 @@
 #include <math.h>
 #include "fsize.h"
 #include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stddef.h>
+#include "buffer.h"
+#include <math.h>
+#include <time.h>
 
 //Função para averiguar um caso de exceção ({0}₁) para a compressão RLE.
 int excecao(char* arr, int i){
@@ -40,23 +47,23 @@ int findSubString(char original[],char toFind[] )
 }
 //Função que conta o número de símbolos duma string devolvendo esse número.
 int conta_simbolos(char* arr){
-    int soma = 0;
+    int sum = 0;
     int comprimento = strlen(arr);
     for (int i = 0; i < comprimento;i++){
         if(arr[i] == '{' && arr[i+2] == '}'){
-            soma++;
+            sum++;
             i+=5;
         }
         else if(arr[i] == '{' && arr[i+3] == '}'){
-            soma++;
+            sum++;
             i+=6;
         } else if(arr[i] == '{' && arr[i+4] == '}'){
-            soma++;
+            sum++;
             i+=7;
         }
-        else soma++;
+        else sum++;
     }
-    return soma;
+    return sum;
 }
 
 //Função que calcula a compressão de um ficheiro RLE em relação ao original.
@@ -94,7 +101,7 @@ int calcula_n_rep (char a[],int index){
 
 //Função que dado um buffer calcula a frequência dos símbolos e mete-os num array ordenado pelo seu código ASCII.
 void freq(Buffer bloco,int reps[],int i_block,int block_size,int n_blocks,int total) {
-     
+
        int i = (i_block-1)*block_size;
        int fim ;
        if (i_block<n_blocks) fim = i_block*block_size;
@@ -108,7 +115,7 @@ void freq(Buffer bloco,int reps[],int i_block,int block_size,int n_blocks,int to
         int count = 0;
         char string1[3];
         char string2[4];
-        
+
         if(bloco.array[i] == '{'){
         if(bloco.array[i] == '{' && bloco.array[i+1] == '0' && bloco.array[i+2] == '}' && bloco.array[i+6] == '{' && bloco.array[i+7] == '0' && bloco.array[i+8] == '}') { 
             int in = calcula_n_rep(bloco.array,i+12);
@@ -116,7 +123,7 @@ void freq(Buffer bloco,int reps[],int i_block,int block_size,int n_blocks,int to
             count += in;
             reps[c2a] += count;
             i += 17; 
-    
+
         } else if(bloco.array[i] == '{' && bloco.array[i+1] == '0' && bloco.array[i+2] == '}') {
                 if(bloco.array[i+9] == '}') {
                     n = bloco.array[i+8];
@@ -184,6 +191,7 @@ void freqBlock(Buffer *final, int reps[]){
 
 // Função que escreve a codificação no ficheiro ".freq".
 void write_file_buffer_ParteA(Buffer * final, char fileName[]){
+
   int i = 0;
   while(fileName[i] != '\0'){
     i++;
@@ -242,21 +250,19 @@ void rle_to_freq(char filename[], unsigned long block_size){
     write_file_buffer_ParteA(&buffer_final,filename);
 }
 
-//Função que calcula e escreve num ficheiro a codificação RLE para um bloco individual.
+//Função que calcula e escreve num ficheiro a codificação RLE de um bloco individual.
 int rle_aux(Buffer bloco_temp, char* filename, int i, int fim) { 
     FILE* destino = fopen(filename, "wb");
-    char atualChar; 
-    char proxChar;  
-    int n_simbolos = 0;
-    int count = 1;
-    int compression;
+    char atualChar, proxChar;  
+    int n_simbolos = 0, count = 1, compressao_bloco = 0;
+
 while(i < fim) { 
      atualChar = bloco_temp.array[i];
      proxChar = bloco_temp.array[i+1];
 
         if(excecao(bloco_temp.array,i) == 1) {
             int count_exc = 1;
-            
+
             while(excecao(bloco_temp.array,i)) {                                                      
                    int indice = findSubString(bloco_temp.array,"{0}₁");        
                     if(bloco_temp.array[indice] == bloco_temp.array[i+6]){
@@ -292,13 +298,13 @@ while(i < fim) {
         i++;
      }  
     fclose(destino);
-    
-    int compressao_bloco =  compressao(bloco_temp,n_simbolos);
+
+    compressao_bloco = compressao(bloco_temp,n_simbolos);
     return compressao_bloco;
 }
 //Função que itera a função rle_aux para obter a compressão RLE bloco a bloco.
 int rle(Buffer origem,char filename[],unsigned long block_size,int total, int n_blocks, int* block_compression) { //
-       int fim, i = 0, soma = 0;
+       int i = 0, fim, soma = 0;
        char terminacao_rle[40] = ".rle";
        strcat(filename,terminacao_rle);
 
@@ -330,16 +336,17 @@ int exec_moduloA(char* filename, unsigned long block_size){
         c = fgetc(fp);
         insertBuffer(&origem,c);
     }
-    
+
+    int soma = 0;
     n_blocks = fsize(fp, NULL, &block_size, &size_of_last_block);   
     total = (n_blocks-1) * block_size + size_of_last_block;         
-    int soma = rle(origem,filename_txt,block_size,total,n_blocks,block_compression);
+    soma = rle(origem,filename_txt,block_size,total,n_blocks,block_compression);
     fclose(fp);
 
     char filename_freq[40];
     strcpy(filename_freq, filename);
     char terminacao_rle[] = ".rle";
-    strcat(filename_freq,terminacao_rle); // tenho que adicionar .rle ao filename original qnd tiver o interpretador 
+    strcat(filename_freq,terminacao_rle); 
     rle_to_freq(filename_freq,block_size);
 
     clock_t end = clock();
@@ -353,7 +360,7 @@ int exec_moduloA(char* filename, unsigned long block_size){
     } else {
     printf("Tamanho dos blocos analisados no ficheiro original: %lu/%lu\n",block_size,size_of_last_block);
     }
-    
+
     int compressao_media = soma / n_blocks;
     printf("Compressão RLE: %d\n", compressao_media);
     /*
@@ -361,7 +368,7 @@ int exec_moduloA(char* filename, unsigned long block_size){
     ficheiro_rle = fopen(filename_freq, "rb");
     int n_blocks_rle = fsize(ficheiro_rle, NULL, &block_size, &size_of_last_block);
     if(n_blocks_rle == 1) {
-        printf("Tamanho dos blocos analisados no ficheiro RLE: %lu bytes\n", size_of_last_block);
+        printf("Tamanho dos blocos analisados no ficheiro RLE:_%lu bytes\n", size_of_last_block);
     } else {
     printf("Tamanho dos blocos analisados no ficheiro RLE: %lu bytes /%lu bytes\n",block_size,size_of_last_block);
     }
@@ -369,8 +376,6 @@ int exec_moduloA(char* filename, unsigned long block_size){
     printf("Tamanho dos blocos analisados no ficheiro RLE: \n");
     printf("Tempo de execução do módulo (milissegundos): %f\n",time_spent_ms);
 
-    //char terminacao_rle_print[40] = ".rle";
-    ///strcat(filename_txt,terminacao_rle_print);
     char terminacao_freq_print[40] = ".freq";
     strcat(filename_freq,terminacao_freq_print);
 
