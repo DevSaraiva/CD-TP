@@ -314,7 +314,6 @@ int rle(Buffer origem,char filename[],unsigned long block_size,int total, int n_
     else fim = total;
     if(i_block == 1) {
        compressao = rle_aux(origem,auxiliar,i,fim);
-       printf("%d", compressao);
         if(compressao < 5) {
             remove("compressao.txt.rle");
             return 0;
@@ -387,7 +386,7 @@ int exec_moduloA(char* filename, unsigned long block_size){
     char terminacao_freq_print[40] = ".freq";
     strcat(filename_freq,terminacao_freq_print);
     if(soma < 5) printf("Ficheiros gerados: Não gera ficheiros (compressão menor que 5%%)");
-    else  printf("Ficheiros gerados: %s,%s",filename_txt,filename_freq);
+    else  printf("Ficheiros gerados: %s,%s\n",filename_txt,filename_freq);
 }
 
 #endif //moduloA
